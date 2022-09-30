@@ -1,9 +1,8 @@
+# FSI 2022
 
-Breve descrição do grupo
-
-* Turno: [LM]XX
-* Grupo: YY
+* Turno: 3LEIC05
+* Grupo: 05
 * Alunos:
-    - Aluno1 upZZZZZ 
-    - Aluno2 upZZZZZ
-    - Aluno3 upZZZZZ
+    - Alexandre Guimarães Gomes Correia (up202007042@fe.up.pt);
+    - Fábio Araújo de Sá (up202007658@fe.up.pt);
+    - Lourenço Alexandre Correia Gonçalves (up202004816@fe.up.pt);
