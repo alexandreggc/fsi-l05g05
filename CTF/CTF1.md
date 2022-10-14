@@ -4,9 +4,9 @@
 
 Ao aceder à página **http://ctf-fsi.fe.up.pt:5001**, que é um servidor WordPress, começamos por inferir todas as dependências do site. Através de uma pesquisa mais cuidada, tanto pela navegação nos diversos links como pelo código-fonte do mesmo, acabamos por descobrir as seguintes dependências:
 
-- Wordpress 5.8.2
-- Plugin Woocommerce Booster 5.4.3
-- Tema Storefront na versão 3.9.1
+- Wordpress 5.8.1
+- Woocommerce plugin 5.7.1
+- Booster for WooCommerce plugin 5.4.3
 
 Depois investigamos em bases de dados de CVEs vulnerabilidades associadas a cada plugin e cada versão, com principal incidência nas que permitissem fazer login como outro utilizador. A CVE-2021-34646 do WooCommerce 5.4.3 pareceu-nos adequada, e ao usarmos a `flag[CVE-2021-34646]` ultrapassamos a primeira parte do desafio.
 
