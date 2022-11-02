@@ -1,29 +1,35 @@
 # Format String Attack
 
-(drafts)
+## Setup
 
-desligamos a randomização de endereços, porque é importante para o ataque com strings descobrir a localização e ordem dos endereços do programa
+Numa fase inicial desligamos a randomização de endereços, pois é importante para este ataque descobrir a localização e ordem dos endereços do programa.
 
 ```bash
 $ sudo sysctl -w kernel.randomize_va_space=0
 ```
 
-Compilar o program.c com m needs to be compiled using the "-z execstack", porque só assim permite que código da stack seja executado
+Depois abrimos dois terminais, um com os servidores usando o Docker dos seed-labs e outro (o cliente) para comunicar com os servidores. Isto permitiu ver as mensagens trocadas dos dois lados. Ao mandar uma string para o servidor, usando o comando:
 
-Dois terminais, um com os servidores do docker e outro (o cliente) para comunicar com os servidores. Isto permite ver as mensagens trocadas dos dois lados
+```bash
+$ echo hello | nc 10.9.0.5 9090
+```
 
-ao mandar a string hello para o servidor ( echo hello | nc 10.9.0.5 9090), o servidor printa alguns endereços:
+O servidor retorna alguns endereços necessários para as tarefas seguintes:
 - endereço do buffer de input
 - endereço da mensagem secreta
-- frame pointer inside do myprintf
-- ????????????????????
+- frame pointer da função myprintf
+- o endereço inicial e final de uma variável **target**
 
+O program.c, que é o programa que corre no servidor, foi compilado usando a flag `-z execstack` porque só assim permite que código dentro da stack seja executado.
 
-# Task 1
+## Task 1
 
 criamos um ficheiro com o script de python dado
 o script contém um %n no fim, o que permite a ocorrência de overflow
-
 por fim injectamos o conteúdo do ficheiro no servidor cat badfile > server
 
-no lado do servidor, percebemos que não houve a mensagem com smiles, logo o servidor foi cr
+Como no lado do servidor não houve a mensagem `Returned properly`, o servidor crashou.
+
+## Task 2
+
+## Task 3
