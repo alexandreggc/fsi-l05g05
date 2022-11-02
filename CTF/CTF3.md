@@ -18,7 +18,7 @@ Para descobrir o endereço da função, usamos o debugger gdb:
 
 ```bash
 $ gdb program
-$ p load_flag
+$ p load_flag # 
 ```
 
 O resultado foi o endereço de retorno "0x08049256", que é "\x60\xC0\x04\x08" em formato de string.
@@ -37,3 +37,23 @@ Ao executar conseguimos ter acesso ao conteúdo do ficheiro `flag.txt` e à flag
 
 ## Segunda parte
 
+Após avaliar o novo `program` que continua sem randomização de endereços, avaliamos o funcionamento do código `main.c`. Desta vez uma bash é lançada se o valor de `key` for 0xBEEF, ou seja, 48879 em decimal. Esta backdoor é suficiente para controlar o servidor e assim consultar o conteúdo do ficheiro **flag.txt**.
+
+Para manipular o valor de key, que é uma variável global e por isso está alocada na Heap, recorremos à format string attack do input através da opção '%n'. Inicialmente precisamos do valor do endereço da variável key, e para isso recorremos ao gdb:
+
+```bash
+$ gdb program
+$ p &key
+```
+
+O resultado foi o endereço "0x0804c034" que é "\x08\x04\xC0\x34" em hexadecimal. Para escrever 48879 neste endereço modificamos ligeiramente a string dada como input: após o endereço pretendido (4 bytes) é necessário escrever exatamente 48879 - 4 = 48875 bytes antes de '%n'. Como o buffer de entrada só tem no máximo 32 bytes disponíveis, recorremos à expressão compacta de leitura do printf `%.Nx`, com N = 48879 - 4 - 4 = 48871. Enquanto que o primeiro valor serve para consumo do '%x', o seguinte serve o '%n'. Note-se que os endereços são iguais pois são válidos e assim não há risco de segmentation fault.
+
+```python
+p.recvuntil(b"here...")
+p.sendline(b"\x34\xC0\x04\x08\x34\xC0\x04\x08%.48871x%n")
+p.interactive()
+```
+
+![CTF 3 B](../img/ctf3task2.png)
+
+Ao executar conseguimos ter acesso ao conteúdo do ficheiro `flag.txt` e à flag do desafio, `flag{67900caf37372586bef79f7dc99581fd}`.
