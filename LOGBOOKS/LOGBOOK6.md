@@ -110,7 +110,7 @@ O output do lado do servidor foi o seguinte:
 
 ### Task 3.B
 
-Desta vez o valor de `target` deve ser mudado para um valor concreto: 0x5000, ou seja 20480 em decimal. Como sabemos que '%n' irá escrever o número de caracteres escritos até ali, então o input até '%n' terá de ter 20408 caracteres. Como o input é grande, usamos a notação `%.NX`, com N = 20408 - 4 - 63*8 = 19980. 
+Desta vez o valor de `target` deve ser mudado para um valor concreto: 0x5000, ou seja 20480 em decimal. Como sabemos que '%n' irá escrever o número de caracteres escritos até ali, então o input até '%n' terá de ter 20408 caracteres. Como o input é grande, usamos a notação `%.NX`, com N = 20408 - 4 - 63*8 = 19980, para escrever os 19980 que faltam com o valor 0. 
 
 ```c
 #include <string.h>
