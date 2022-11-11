@@ -91,3 +91,12 @@ Bingo:
 
 #### Task 3.2 - Modify other people’ salary
 
+Parecido com o anterior, mas com uma where clause antes do final. No final comentar tudo
+
+```sql
+933667378',Salary='-9999999' WHERE Name='Boby'#
+```
+
+Bingo:
+
+![Task 3 b](../img/lab8task3b.png)
