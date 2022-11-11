@@ -64,5 +64,30 @@ Com o comando anterior obtivemos o código HTML de toda a página que continha o
 
 #### Task 2.3 - Append a new SQL statement
 
+Podemos adicionar novos comandos SQL usando ";". Para isso, modificamos no nosso input malicioso inicial para que fizesse um side-effect. Por exemplo, eliminar a tabela de credenciais:
+
+```sql
+admin'; DROP TABLE IF EXISTS credentials; #
+```
+
+No entanto deu erro. Segundo [esta fonte](https://www.php.net/manual/en/mysqli.quickstart.multiple-statement.php), a extensão de MySQL utilizada pelo PHP do servidor tem uma proteção que impede a execução de múltiplas queries.
+
+![Task 2 c](../img/lab8task2c.png)
+
+
 ### Task 3: SQL Injection Attack on UPDATE Statement
+
+#### Task 3.1 - Modify your own salary
+
+Após dar login com a alice, 11, e na parte de edit profile. Apesar de password ser hash, o phone number está desprotegido. Usando a mesma técnica:. Explicar plica.
+
+```sql
+933667378',Salary='9999999
+```
+
+Bingo:
+
+![Task 3 a](../img/lab8task3a.png)
+
+#### Task 3.2 - Modify other people’ salary
 
