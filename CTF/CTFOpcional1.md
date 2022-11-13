@@ -69,7 +69,7 @@ int main() {
 Este código é colocado em printenv.c linha a linha da seguinte forma:
 
 ```bash
-echo "linha" >> printenv.c
+$ echo "linha" >> printenv.c
 ```
 
 No final compilamos o código:
@@ -78,6 +78,12 @@ No final compilamos o código:
 $ gcc -Wall -o printenv printenv.c
 ```
 
-Finalmente, esperamos uma nova execução de `my_script.sh` através do script do cron. Este executou tal como previsto, porque em vez de escrever as variáveis de ambiente acabou por escrever a flag em `last_log`:
+No entanto, como alteramos a variável de ambiente PATH, o programa não vai encontrar o binário `cat` no novo diretório, pelo que temos de o copiar para lá: 
+
+```
+$ cp /bin/cat /tmp/myenv
+```
+
+Finalmente, esperamos uma nova execução de `my_script.sh` através do **cronscript** e verificou-se que o `last_log` continha a flag tal como previsto:
 
 ![CTF Opcional 1 b](../img/ctfopcional1b.png)
