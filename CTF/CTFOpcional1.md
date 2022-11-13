@@ -4,7 +4,8 @@ Verificamos que não temos permissão para abrir diretamente o ficheiro `flags/f
 
 ![CTF Opcional 1 a](../img/ctfopcional1a.png)
 
-No diretório "/tmp" existe um ficheiro "last_log.txt" que é atualizado todos os minutos, com permissões de flag_reader, através do **cronscript** (/etc/cron.d/mycronscript) seguinte:
+Verificou-se também que `/tmp` é o único diretório onde o nosso utilizador tem permissões de escrita.
+Neste diretório existe um ficheiro `last_log.txt` que é atualizado todos os minutos, com permissões de flag_reader, através do **cronscript** (/etc/cron.d/mycronscript) seguinte:
 
 ```note
 * * * * * flag_reader /bin/bash -c "/home/flag_reader/my_script.sh > /tmp/last_log"
