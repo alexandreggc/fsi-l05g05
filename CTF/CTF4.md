@@ -60,7 +60,12 @@ SHELL_CODE = (
 ).encode('latin-1')
 ```
 
-O input terá exatamente 112 bytes:
+O input terá exatamente 112 bytes: 100 bytes para atingir o máximo espaço de memória alocada em buffer e 12 bytes para dar overflow a 3 endereços:
+- O endereço da variável passada à função printf;
+- O frame-pointer de main;
+- O endereço de retorno da main;
+
+O exploit terá a seguinte estrutura:
 
 - Os primeiros 23 bytes contêm o shell code;
 - Os últimos 4 bytes contêm o endereço de retorno malicioso, que irá corresponder ao endereço do início do buffer;
@@ -76,7 +81,7 @@ exploit[: len(SHELL_CODE)] = SHELL_CODE
 exploit[BUFFER_SIZE - len(buffer_address):] = buffer_address
 ```
 
-Isto irá reescrever o endereço de retorno da função main, que apontará agora para o shell code. Note-se que este processo também reescreve o frame pointer de main, que está na stack entre o endereço de retorno e o buffer. No entanto, como main não chega a retornar, a manutenção do valor original torna-se irrelevante.
+Isto irá reescrever o endereço de retorno da função main, que apontará agora para o shell code. Note-se que este processo também reescreve o frame pointer de main e o endereço do argumento de printf, que estão na stack entre o endereço de retorno e o buffer. No entanto, como main não chega a retornar, a manutenção dos valores originais torna-se irrelevante.
 
 Tal como esperado, ao executar o código (disponível [aqui](../CTF/Exploits/ExploitCTF2S8.py)), conseguimos abrir uma bash no servidor:
 
