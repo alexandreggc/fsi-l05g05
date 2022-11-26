@@ -83,7 +83,7 @@ exploit[BUFFER_SIZE - len(buffer_address):] = buffer_address
 
 Isto irá reescrever o endereço de retorno da função main, que apontará agora para o shell code. Note-se que este processo também reescreve o frame pointer de main e o endereço do argumento de printf, que estão na stack entre o endereço de retorno e o buffer. No entanto, como main não chega a retornar, a manutenção dos valores originais torna-se irrelevante.
 
-Tal como esperado, ao executar o código (disponível [aqui](../CTF/Exploits/ExploitCTF2S8.py)), conseguimos abrir uma bash no servidor:
+Tal como esperado, ao executar o código (disponível [aqui](../CTF/Exploits/Semana08.py)), conseguimos abrir uma bash no servidor:
 
 ![CTF 4 2 b](../img/ctf4task2b.png)
 
