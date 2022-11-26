@@ -1,4 +1,4 @@
-# British Punctuality
+# British Punctuality - CTF Extra
 
 Verificamos que não temos permissão para abrir diretamente o ficheiro `flags/flag.txt`, mas o utilizador "flag_reader" tem:
 
