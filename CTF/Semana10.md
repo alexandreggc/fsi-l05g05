@@ -30,13 +30,13 @@ Após o refresh automático da página, a flag é visualizada:
 ## Segunda parte
 
 Inicialmente exploramos o site disponibilizado na plataforma CTF na porta 5000. <br>
-Um utilizador sem estar autenticado consegue ter acesso à funcionalidade "Ping a host", o que no contexto do CTF faz sentido. A funcionalidade "ping" está diretamente ligada a utilitários Linux e por isso o input deverá ser corrido num terminal. Testamos então introduzir o seguinte input através de *command injection*:
+Um utilizador sem estar autenticado consegue ter acesso à funcionalidade "Ping a host", o que no contexto do CTF faz sentido. A funcionalidade "ping" está diretamente ligada a utilitários Linux e por isso o input deverá ser corrido num terminal. Testamos então introduzir o seguinte input de modo a realizar um *command injection*:
 
 ```note
 ;ls
 ```
 
-E obtivemos o seguinte resultado:
+E funcionou, visto que obtivemos o seguinte resultado:
 
 ![Ping](../img/ctf5task2a.png)
 
