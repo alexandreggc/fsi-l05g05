@@ -57,13 +57,21 @@ Este certificado é *self-signed* pois o campo *issuer* e o campo *subject* é o
 
 ![Self-signed](../img/lab11task1b.png)
 
-O conteúdo do ficheiro gerado referente à criptografia usada está disponível [aqui](../docs/RSA.txt). Nele conseguimos identificar os elementos seguintes:
+O conteúdo do ficheiro gerado referente à criptografia usada está disponível [aqui](../docs/CA_RSA.txt). Nele conseguimos identificar os elementos seguintes:
 - os dois números primos (campo `prime1` e `prime2`);
 - o *modulus* (campo `modulus`);
 - os expoentes públicos e privados (campo `publicExponent` e `privateExponent`, respetivamente);
 - o coeficiente (campo `coeficient`);
 
 ## Task 2 - Generating a Certificate Request for Your Web Server
+
+Geramos através do seguinte comando certificado para o site `www.bank32.com`:
+
+```bash
+openssl req -newkey rsa:2048 -sha256 -keyout server.key -out server.csr -subj "/CN=www.bank32.com/O=Bank32 Inc./C=US"  passout pass:1234 -addext "subjectAltName = DNS:www.bank32.com, DNS:www.bank32A.com, DNS:www.bank32A.com"
+```
+
+Com isto obtivemos dois ficheiros: o [RSA do site](../docs/SV_RSA.txt) e o [Certificado do site](../docs/SV_REQ.txt).
 
 ## Task 3 - : Generating a Certificate for your server
 
