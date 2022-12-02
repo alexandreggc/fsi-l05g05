@@ -1,4 +1,3 @@
-
 # Cross-Site Scripting (XSS) 
 
 ## Setup
