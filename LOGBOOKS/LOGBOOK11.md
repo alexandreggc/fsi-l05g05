@@ -102,6 +102,40 @@ O output permitiu verificar que o certificado abrange todos os nomes colocados n
 
 ## Task 4 - Deploying Certificate in an Apache-Based HTTPS Website
 
+Copiamos os ficheiros "server.ctf" e "server.key" para a pasta partilhada `/volumes` e mudamos os nomes para bank32, com a respetiva extensão. Modificamos o ficheiro "etc/apache2/sites-available/bank32_apache_ssl.conf" dentro do container, para que o certificado e chave usados sejam os da pasta partilhada:
+
+```note
+<VirtualHost *:443> 
+    DocumentRoot /var/www/bank32
+    ServerName www.bank32.com
+    ServerAlias www.bank32A.com
+    ServerAlias www.bank32B.com
+    ServerAlias www.bank32W.com
+    DirectoryIndex index.html
+    SSLEngine On 
+    SSLCertificateFile /volumes/bank32.crt
+    SSLCertificateKeyFile /volumes/bank32.key
+</VirtualHost>
+```
+
+Para iniciar o servidor Apache foi necessário primeiro abrir uma shell no container e inserir os seguintes comandos:
+
+```bash
+$ service apache2 start
+```
+
+![Apache start](../img/lab11task4a.png)
+
+Acedemos ao *site* `https://bank32.com`, mas verificamos que a ligação era insegura (não estava encriptada):
+
+![Bank32.com inseguro](../img/lab11task4b.png)
+
+Para tornar a nossa ligação segura, adicionamos o certificado CA que geramos às autoridades no browser, em `about:preferences#privacy` -> Certificates -> View Certificates -> Authorities -> Import, e verificamos que a ligação passou a ser segura: 
+
+![Bank32.com seguro](../img/lab11task4c.png)
+
 ## Task 5 - Launching a Man-In-The-Middle Attack
+
+
 
 ## Task 6 - Launching a Man-In-The-Middle Attack with a Compromised CA
