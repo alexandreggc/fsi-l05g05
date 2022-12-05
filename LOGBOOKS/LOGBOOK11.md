@@ -73,7 +73,32 @@ openssl req -newkey rsa:2048 -sha256 -keyout server.key -out server.csr -subj "/
 
 Com isto obtivemos dois ficheiros: o [RSA do site](../docs/SV_RSA.txt) e o [Certificado do site](../docs/SV_REQ.txt).
 
-## Task 3 - : Generating a Certificate for your server
+## Task 3 - Generating a Certificate for your server
+
+Para gerar um certificado para o nosso próprio servidor www.bank32.com, foi necessário correr o seguinte comando:
+
+```bash
+$ openssl ca -config openssl.cnf -policy policy_anything -md sha256 -days 3650 -in server.csr -out server.crt -batch -cert ca.crt -keyfile ca.key
+```
+
+Com isto obtivemos dois ficheiros: `server.crt`. O conteúdo desse ficheiro permite confirmar que se trata de um certificado para o servidor supracitado:
+
+![Bank certificate 1](../img/lab11task3a.png)
+![Bank certificate 1](../img/lab11task3b.png)
+
+Para vertificar que, comentamos a linha "descomentar copy_extensions = copy" do ficheiro "openssl.cnf" e corremos o seguinte código:
+
+```bash
+$ openssl x509 -in server.crt -text -noout
+```
+
+O output permitiu verificar que o certificado abrange todos os nomes colocados na tarefa 2:
+
+- www.bank32.com
+- www.bank32A.com
+- www.bank32A.com
+
+![Bank alternative names](../img/lab11task3c.png)
 
 ## Task 4 - Deploying Certificate in an Apache-Based HTTPS Website
 
