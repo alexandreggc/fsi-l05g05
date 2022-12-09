@@ -155,10 +155,17 @@ Isto deve-se à incoerência do certificado usado, porque o nome de dominio não
 
 ## Task 6 - Launching a Man-In-The-Middle Attack with a Compromised CA
 
-Admitindo que o nosso CA está comprometido, pode ser usado para criar certificados para um site malicioso. No caso, queremos criar um certificado para o site `www.example.com`, por isso repetimos o comando da Tarefa 2:
+Admitindo que o nosso CA está comprometido, pode ser usado para criar certificados para um site malicioso. No caso, queremos criar um certificado para o site `www.example.com`, por isso repetimos os comandos da Tarefa 2:
 
 ```bash
 $ openssl req -newkey rsa:2048 -sha256 -keyout example.key -out example.csr -subj "/CN=www.example.com/O=example Inc./C=US" -passout pass:1234
+$ openssl ca -config openssl.cnf -policy policy_anything -md sha256 -days 3650 -in example.csr -out example.crt -batch -cert ca.crt -keyfile ca.key
 ```
 
-Depois 
+Depois modificamos o ficheiro de configuração do servidor `etc/apache2/sites-available/bank32_apache_ssl.conf` para utilizar os dois ficheiros originados: **example.csr** e **example.key**:
+
+![Man in the middle attack 3](../img/lab11task6a.png)
+
+Ao dar reiniciar o servidor e ir ao site `www.example.com` verificamos que a ligação já era segura. 
+
+![Man in the middle attack 4](../img/lab11task6b.png)
