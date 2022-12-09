@@ -147,9 +147,18 @@ sudo nano etc/hosts     # colocar '10.9.0.80 www.example.com'
 
 Ao dar rebuild ao servidor e ir ao site `www.example.com` verificamos que o browser alerta para um potencial risco:
 
-![Man in the middle attack](../img/lab11task5b.png)
+![Man in the middle attack 1](../img/lab11task5b.png)
 
-Isto deve-se à incoerência do certificado usado, porque o nome de dominio não coincide com aquele presente no CA. 
+![Man in the middle attack 2](../img/lab11task5c.png)
+
+Isto deve-se à incoerência do certificado usado, porque o nome de dominio não coincide com aquele presente no certificado do servidor. 
 
 ## Task 6 - Launching a Man-In-The-Middle Attack with a Compromised CA
 
+Admitindo que o nosso CA está comprometido, pode ser usado para criar certificados para um site malicioso. No caso, queremos criar um certificado para o site `www.example.com`, por isso repetimos o comando da Tarefa 2:
+
+```bash
+$ openssl req -newkey rsa:2048 -sha256 -keyout example.key -out example.csr -subj "/CN=www.example.com/O=example Inc./C=US" -passout pass:1234
+```
+
+Depois 
