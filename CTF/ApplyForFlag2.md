@@ -39,6 +39,8 @@ Fazendo de novo, verificamos que ja é feito o redirecionamento para a página c
 
 ![Request not evaluated yet](../img/applyforflag4.png)
 
-Isto acontece porque, ao desativar o javascript foi desativado o script que faz reload a página, pelo que é necessario 
+Isto acontece porque, ao desativar o javascript foi desativado o script que faz reload a página, pelo que é necessário fazer reload manualmente: 
 
 ![Flag](../img/applyforflag5.png)
+
+Como é possivel observar, obtemos a flag.
