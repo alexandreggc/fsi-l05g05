@@ -6,7 +6,6 @@ Numa fase inicial adicionamos novas entradas nos hosts conhecidos pela máquina 
 
 ```bash
 sudo nano etc/hosts     # colocar '10.9.0.80 www.bank32.com'
-                        # colocar '10.9.0.80 www.smith2020.com'
 
 $ dcbuild               # docker-compose build
 $ dcup                  # docker-compose up
@@ -136,6 +135,21 @@ Para tornar a nossa ligação segura, adicionamos o certificado CA que geramos �
 
 ## Task 5 - Launching a Man-In-The-Middle Attack
 
+A configuração do servidor foi modificada para agora apresentar o site `www.example.com` com as configurações anteriores. O ficheiro "etc/apache2/sites-available/bank32_apache_ssl.conf" ficou da seguinte forma:
 
+![Configurações](../img/lab11task5a.png)
+
+Modificamos também o DNS da vítima, ligando o *hostname* `www.example.com` ao IP do webserver malicioso:
+
+```bash
+sudo nano etc/hosts     # colocar '10.9.0.80 www.example.com'
+```
+
+Ao dar rebuild ao servidor e ir ao site `www.example.com` verificamos que o browser alerta para um potencial risco:
+
+![Man in the middle attack](../img/lab11task5b.png)
+
+Isto deve-se à incoerência do certificado usado, porque o nome de dominio não coincide com aquele presente no CA. 
 
 ## Task 6 - Launching a Man-In-The-Middle Attack with a Compromised CA
+
