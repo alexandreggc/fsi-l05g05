@@ -81,15 +81,17 @@ def getNextPrime(number):
 
 Com isto obtivemos os valores de `p`, `q` e `n`. Com o expoente público conhecido, `e = 0x10001`, fomos em busca do valor de `d` que é o último necessário para descodificar a mensagem. Sabia-se que o número da procura apresentava a seguinte propriedade:
 
-> (d * e) % ((p - 1) * (q - 1)) == 1
+```note
+(d * e) % ((p - 1) * (q - 1)) == 1
+```
 
-Em python, a equação pode ser traduzida da seguinte forma:
+Em Python, a equação pode ser traduzida da seguinte forma:
 
 ```python
 d = pow(e, -1, ((p-1)*(q-1)))
 ```
 
-Com todos os valores descobertos, bastou chamar a função `dec(message)` disponibilizada pelo template e traduzir o output para utf-8:
+Com todos os valores descobertos, bastou chamar a função `dec(message)` disponibilizada pelo template:
 
 ```python
 p = getNextPrime(2**512)
@@ -108,6 +110,66 @@ O script com todo o código necessário para completar o CTF está disponível e
 
 ## Segunda parte
 
-//TODO
+Desta vez o servidor CTF na porta 6001 envia duas mensagens com o mesmo conteúdo (a flag) e cifradas com o mesmo valor de `n` mas diferentes `e`:
 
-Todo o código necessário para completar o CTF está disponível em [Semana11_CTF2](/CTF/Exploits/Semana11_CTF2.py).
+```note
+message_1 = "e59b9d34740e0b93baa3fda0d9105e0152230ed2c2b24ee8bc0e3ffdf1a8d55895926ba23aa60547396dbf561b044c3d408800e9c80a286822353be4ad4876ae0cd3f3a4a7c9d5039191696bd7abc66b2577736db86bf6a17d3867236215f01c13abf122054de5f4265decbcd366b125b826ca368b9e18bf91d9e688fd6503dbbc81ac8017fc0835c3790a1cabf084b7044b5cf796c47b4946db80b750b8b00d7ab0b7b3cdd7eadce3062bb26eeaf7393d60422f1890543413d1e7f339fff50399ea2a9319aad8adffb749f3cad52a5de42c629ccee564c2e7d815b399d237acf16545bf0c01c0f0bffa02d6afe402b2ce92f09f8ae05ba68dbf3794c406641b"
+
+exponent_1 = 65537
+
+message_2 = "8b072adb1b6b0eb67962da4f8c8bafa470c94500309613243048a7994f4a691ea2fec0b5886b192233b8f21e6f7fdb7d44ff19fa713e24e868960f0253ab697247f8c06402517c6f534d6a9fd5ca9d1ce73b6dc3ce90a3e9d2b78644c5bbee0cd0e9c17e32ff27946ec41dcdebd0a694496c4ca93ef4a5f6f43782c72a159c583d121d7c909957be275b2a460ac3a2b36de775a58a4234099c0b71242d48bdaeaf7f5d447c7c18b93cfffa4ab74b4e59345d13bf746ddd639725dcb6de6d4130ef7a32152dc635679ee9365956c7cf0457b10ae64d308a23bd76dbe09edf46f596ced7134d745f4fa365b8485e59d79909c172c1f20b2601ef55f172b81c667a"
+
+exponent_2 = 65539
+
+n = 29802384007335836114060790946940172263849688074203847205679161119246740969024691447256543750864846273960708438254311566283952628484424015493681621963467820718118574987867439608763479491101507201581057223558989005313208698460317488564288291082719699829753178633499407801126495589784600255076069467634364857018709745459288982060955372620312140134052685549203294828798700414465539743217609556452039466944664983781342587551185679334642222972770876019643835909446132146455764152958176465019970075319062952372134839912555603753959250424342115581031979523075376134933803222122260987279941806379954414425556495125737356327411
+```
+
+Tal como o enunciado sugere, fomos em busca de ataques à criptografia RSA de acordo com as informações que possuíamos. Descobrimos o [Common Modulus Attack](https://infosecwriteups.com/rsa-attacks-common-modulus-7bdb34f331a5). Para implementar este ataque, primeiro é necessário traduzir as mensagens descobertas para valores inteiros:
+
+```python
+m1 = int.from_bytes(bytes.fromhex(message_1), "big")
+m2 = int.from_bytes(bytes.fromhex(message_2), "big")
+```
+
+A mensagem original é descoberta seguindo a fórmula:
+
+```note
+decoded_message = ((pow(m1, a, n) * pow(m2, b, n)) % n)
+```
+
+Em que os valores de `a` e `b` seguem a seguinte propriedade:
+
+```note
+a*exponent_1 + b*exponent_2 == 1
+```
+
+Para descobrir os coeficientes `a` e `b` da equação anterior, recorremos ao *Extended Euclidean Algorithm*. O código usado foi extraído [desta fonte](https://www.techiedelight.com/extended-euclidean-algorithm-implementation/):
+
+```python
+def extended_gcd(a, b):
+
+    # Credits: Techie Delight
+    # https://www.techiedelight.com/extended-euclidean-algorithm-implementation/ 
+
+    if a == 0:
+        return b, 0, 1
+    else:
+        gcd, x, y = extended_gcd(b % a, a)
+        return gcd, y - (b // a) * x, x
+
+gcd, a, b = extended_gcd(exponent_1, exponent_2)
+
+assert(gcd == 1)
+assert(a*exponent_1 + b*exponent_2 == 1)
+```
+
+Com todos os valores encontrados descodificamos a mensagem:
+
+```python
+decoded_message = ((pow(m1, a, n) * pow(m2, b, n)) % n)
+print(decoded_message.to_bytes(256, 'big').decode())
+```
+
+![CTF 6 2](/img/ctf6task2.png)
+
+O script com todo o código necessário para completar o CTF está disponível em [Semana11_CTF2](/CTF/Exploits/Semana11_CTF2.py).
